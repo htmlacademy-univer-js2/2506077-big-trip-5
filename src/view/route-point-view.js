@@ -1,4 +1,4 @@
-import AbstractView from './abstract-view.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { formatDate, formatTime, formatDatetime, calculateDuration } from '../utils.js';
 import { offersByType } from '../mock/task.js';
 
@@ -64,12 +64,26 @@ const createRoutePointTemplate = (routePoint) => {
 };
 
 export default class RoutePointView extends AbstractView {
-  constructor(routePoint) {
+  #onOpenEditButtonClick = null;
+
+  constructor(routePoint, onOpenEditButtonClick) {
     super();
     this.routePoint = routePoint;
+    this.#onOpenEditButtonClick = onOpenEditButtonClick;
+
+    this.#setEventListeners();
   }
 
-  getTemplate() {
+  get template() {
     return createRoutePointTemplate(this.routePoint);
   }
+
+  #setEventListeners() {
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#openEditButtonClickHandler);
+  }
+
+  #openEditButtonClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onOpenEditButtonClick();
+  };
 }

@@ -43,4 +43,6 @@ const formatDateToCustomFormat = (date) => {
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 };
 
-export { formatDate, formatTime, formatDatetime, calculateDuration, formatDateToCustomFormat };
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export { formatDate, formatTime, formatDatetime, calculateDuration, formatDateToCustomFormat, isEscapeKey };
