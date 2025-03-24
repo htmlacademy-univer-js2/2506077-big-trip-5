@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { formatDateToCustomFormat } from '../utils.js';
-import { offersByType, destinations } from '../mock/task.js';
+import { offersByType, destinations } from '../mock/mock-route-data.js';
 
 const createEventFormTemplate = (routePoint) => {
   const { dateFrom, dateTo, type, city, availableOfferIds, selectedOfferIds, destinationId } = routePoint;
@@ -61,6 +61,7 @@ const createEventFormTemplate = (routePoint) => {
                   <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
                 </div>
 
+
                 <div class="event__type-item">
                   <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive" ${type.toLowerCase() === 'drive' ? 'checked' : ''}>
                   <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
@@ -116,6 +117,7 @@ const createEventFormTemplate = (routePoint) => {
             </label>
             <input class="event__input event__input--price" id="event-price-1" type="text" name="event-price" value="${routePoint.price || ''}" placeholder="price">
           </div>
+
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
           <button class="event__reset-btn" type="reset">Delete</button>

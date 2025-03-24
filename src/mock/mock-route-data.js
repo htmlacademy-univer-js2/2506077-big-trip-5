@@ -117,6 +117,7 @@ const destinations = [
     name: 'Berlin',
     description: `
       Aliquam id orci ut lectus varius viverra.
+
       Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.
       Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.
       Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.
@@ -158,8 +159,8 @@ const mockRoutePoints = [
     isFavorite: false
   },
   {
-    dateFrom: new Date('2025-02-21T14:00:00'),
-    dateTo: new Date('2025-02-21T17:00:00'),
+    dateFrom: new Date('2025-03-08T07:00:00'),
+    dateTo: new Date('2025-03-08T09:00:00'),
     type: 'Bus',
     city: 'New York',
     price: 80,
@@ -169,8 +170,8 @@ const mockRoutePoints = [
     isFavorite: false
   },
   {
-    dateFrom: new Date('2025-02-23T09:00:00'),
-    dateTo: new Date('2025-02-23T13:00:00'),
+    dateFrom: new Date('2025-03-08T09:00:00'),
+    dateTo: new Date('2025-03-08T15:00:00'),
     type: 'Sightseeing',
     city: 'Sydney',
     price: 750,
@@ -180,8 +181,8 @@ const mockRoutePoints = [
     isFavorite: true
   },
   {
-    dateFrom: new Date('2025-02-24T11:00:00'),
-    dateTo: new Date('2025-02-24T12:30:00'),
+    dateFrom: new Date('2025-03-24T11:00:00'),
+    dateTo: new Date('2025-03-24T12:30:00'),
     type: 'Taxi',
     city: 'Paris',
     price: 40,
@@ -191,8 +192,8 @@ const mockRoutePoints = [
     isFavorite: false
   },
   {
-    dateFrom: new Date('2025-02-26T15:00:00'),
-    dateTo: new Date('2025-02-26T16:30:00'),
+    dateFrom: new Date('2025-03-26T15:00:00'),
+    dateTo: new Date('2025-03-26T16:30:00'),
     type: 'Ship',
     city: 'Rome',
     price: 600,
@@ -202,8 +203,8 @@ const mockRoutePoints = [
     isFavorite: true
   },
   {
-    dateFrom: new Date('2025-02-28T12:00:00'),
-    dateTo: new Date('2025-02-28T13:30:00'),
+    dateFrom: new Date('2025-03-28T12:00:00'),
+    dateTo: new Date('2025-03-28T13:30:00'),
     type: 'Drive',
     city: 'London',
     price: 350,
@@ -213,8 +214,8 @@ const mockRoutePoints = [
     isFavorite: false
   },
   {
-    dateFrom: new Date('2025-03-01T09:00:00'),
-    dateTo: new Date('2025-03-01T10:30:00'),
+    dateFrom: new Date('2025-04-01T09:00:00'),
+    dateTo: new Date('2025-04-01T10:30:00'),
     type: 'Check-in',
     city: 'Berlin',
     price: 200,
@@ -224,8 +225,8 @@ const mockRoutePoints = [
     isFavorite: true
   },
   {
-    dateFrom: new Date('2025-03-02T18:00:00'),
-    dateTo: new Date('2025-03-02T18:30:00'),
+    dateFrom: new Date('2025-04-02T18:00:00'),
+    dateTo: new Date('2025-04-02T18:30:00'),
     type: 'Restaurant',
     city: 'Amsterdam',
     price: 500,
