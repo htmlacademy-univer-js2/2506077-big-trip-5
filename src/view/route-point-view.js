@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { formatDate, formatTime, formatDatetime, calculateDuration } from '../utils.js';
-import { offersByType } from '../mock/task.js';
+import { offersByType } from '../mock/mock-route-data.js';
 
 const createRoutePointTemplate = (routePoint) => {
   const { dateFrom, dateTo, type, city, price, availableOfferIds, selectedOfferIds, isFavorite } = routePoint;

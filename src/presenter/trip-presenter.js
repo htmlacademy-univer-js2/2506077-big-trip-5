@@ -5,7 +5,11 @@ import CreateEditEventView from '../view/create-event-form-view.js';
 import RoutePointView from '../view/route-point-view.js';
 import EventList from '../view/event-list-view.js';
 import RoutePointsModel from '../model/route-point-model.js';
+import ListMessageView from '../view/empty-list-message-view.js';
 import { isEscapeKey } from '../utils.js';
+import { generateFilters } from '../mock/filter-data.js';
+import { messages } from '../mock/message-data.js';
+import { generateSort } from '../mock/sort-data.js';
 
 
 export default class TripPresenter {
@@ -18,9 +22,17 @@ export default class TripPresenter {
 
   init() {
     const routePoints = this.routePointsModel.getRoutePoints();
+    const filters = generateFilters(routePoints);
+    const sort = generateSort(routePoints);
 
-    render(new FilterView(), this.filterContainer);
-    render(new SortView(), this.eventsContainer);
+    render(new FilterView(filters), this.filterContainer);
+    render(new SortView(sort), this.eventsContainer);
+
+    if (routePoints.length === 0) {
+      render(new ListMessageView(messages.everything), this.eventsContainer);
+      return;
+    }
+
     render(this.eventsListContainer, this.eventsContainer);
 
     routePoints.forEach((routePoint) => {
@@ -31,26 +43,26 @@ export default class TripPresenter {
   }
 
   #renderRoutePoint(routePoint) {
-    const escKeyDownHandler = (evt) => {
+    const onEscKeyDown = (evt) => {
       if (isEscapeKey(evt)) {
         replaceEditPointToPoint();
-        document.removeEventListener('keydown', escKeyDownHandler);
+        document.removeEventListener('keydown', onEscKeyDown);
       }
     };
 
     const onOpenEditButtonClick = () => {
       replacePointToEditPoint();
-      document.addEventListener('keydown', escKeyDownHandler);
+      document.addEventListener('keydown', onEscKeyDown);
     };
 
     const onCloseEditButtonClick = () => {
       replaceEditPointToPoint();
-      document.removeEventListener('keydown', escKeyDownHandler);
+      document.removeEventListener('keydown', onEscKeyDown);
     };
 
     const onSubmitButtonClick = () => {
       replaceEditPointToPoint();
-      document.removeEventListener('keydown', escKeyDownHandler);
+      document.removeEventListener('keydown', onEscKeyDown);
     };
 
     const point = new RoutePointView(routePoint, onOpenEditButtonClick);
