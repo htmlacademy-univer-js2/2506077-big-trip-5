@@ -1,4 +1,4 @@
-import { FilterType } from './filter-data.js';
+import { FilterType } from '../const.js';
 
 const messages = {
   [FilterType.EVERYTHING]: 'Click New Event to create your first point',
