@@ -53,6 +53,8 @@ const isPresentPoint = (point) => dayjs().isAfter(point.dateFrom, 'minute') && d
 
 const isPastPoint = (point) => dayjs().isAfter(point.dateTo, 'minute');
 
+const updatePoint = (points, updatedPoint) => points.map((point) => point.id === updatedPoint.id ? updatedPoint : point);
+
 export {
   formatDate,
   formatTime,
@@ -62,5 +64,6 @@ export {
   isEscapeKey,
   isFuturePoint,
   isPresentPoint,
-  isPastPoint
+  isPastPoint,
+  updatePoint
 };

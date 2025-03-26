@@ -137,6 +137,7 @@ const destinations = [
 
 const mockRoutePoints = [
   {
+    id: 1,
     dateFrom: new Date('2025-02-20T10:30:00'),
     dateTo: new Date('2025-02-20T11:30:00'),
     type: 'Flight',
@@ -148,6 +149,7 @@ const mockRoutePoints = [
     isFavorite: true
   },
   {
+    id: 2,
     dateFrom: new Date('2025-02-21T08:00:00'),
     dateTo: new Date('2025-02-21T10:00:00'),
     type: 'Train',
@@ -159,6 +161,7 @@ const mockRoutePoints = [
     isFavorite: false
   },
   {
+    id: 3,
     dateFrom: new Date('2025-03-08T07:00:00'),
     dateTo: new Date('2025-03-08T09:00:00'),
     type: 'Bus',
@@ -170,6 +173,7 @@ const mockRoutePoints = [
     isFavorite: false
   },
   {
+    id: 4,
     dateFrom: new Date('2025-03-08T09:00:00'),
     dateTo: new Date('2025-03-08T15:00:00'),
     type: 'Sightseeing',
@@ -181,6 +185,7 @@ const mockRoutePoints = [
     isFavorite: true
   },
   {
+    id: 5,
     dateFrom: new Date('2025-03-24T11:00:00'),
     dateTo: new Date('2025-03-24T12:30:00'),
     type: 'Taxi',
@@ -192,6 +197,7 @@ const mockRoutePoints = [
     isFavorite: false
   },
   {
+    id: 6,
     dateFrom: new Date('2025-03-26T15:00:00'),
     dateTo: new Date('2025-03-26T16:30:00'),
     type: 'Ship',
@@ -203,6 +209,7 @@ const mockRoutePoints = [
     isFavorite: true
   },
   {
+    id: 7,
     dateFrom: new Date('2025-03-28T12:00:00'),
     dateTo: new Date('2025-03-28T13:30:00'),
     type: 'Drive',
@@ -214,6 +221,7 @@ const mockRoutePoints = [
     isFavorite: false
   },
   {
+    id: 8,
     dateFrom: new Date('2025-04-01T09:00:00'),
     dateTo: new Date('2025-04-01T10:30:00'),
     type: 'Check-in',
@@ -225,6 +233,7 @@ const mockRoutePoints = [
     isFavorite: true
   },
   {
+    id: 9,
     dateFrom: new Date('2025-04-02T18:00:00'),
     dateTo: new Date('2025-04-02T18:30:00'),
     type: 'Restaurant',
@@ -236,6 +245,7 @@ const mockRoutePoints = [
     isFavorite: true
   },
   {
+    id: 10,
     dateFrom: null,
     dateTo: null,
     type: '',

@@ -65,11 +65,13 @@ const createRoutePointTemplate = (routePoint) => {
 
 export default class RoutePointView extends AbstractView {
   #onOpenEditButtonClick = null;
+  #onFavoriteClick = null;
 
-  constructor(routePoint, onOpenEditButtonClick) {
+  constructor(routePoint, onOpenEditButtonClick, onFavoriteClick) {
     super();
     this.routePoint = routePoint;
     this.#onOpenEditButtonClick = onOpenEditButtonClick;
+    this.#onFavoriteClick = onFavoriteClick;
 
     this.#setEventListeners();
   }
@@ -80,10 +82,16 @@ export default class RoutePointView extends AbstractView {
 
   #setEventListeners() {
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#openEditButtonClickHandler);
+    this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteButtonClickHandler);
   }
 
   #openEditButtonClickHandler = (evt) => {
     evt.preventDefault();
     this.#onOpenEditButtonClick();
+  };
+
+  #favoriteButtonClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onFavoriteClick(this.routePoint);
   };
 }

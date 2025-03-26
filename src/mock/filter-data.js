@@ -1,11 +1,5 @@
 import { isFuturePoint, isPresentPoint, isPastPoint } from '../utils.js';
-
-const FilterType = {
-  EVERYTHING: 'everything',
-  FUTURE: 'future',
-  PRESENT: 'present',
-  PAST: 'past'
-};
+import { FilterType } from '../const.js';
 
 const filter = {
   [FilterType.EVERYTHING]: (points) => points,
@@ -19,4 +13,4 @@ const generateFilters = (points) => Object.entries(filter).map(([filterType, fil
   count: filterFunction(points).length
 }));
 
-export { FilterType, generateFilters };
+export { generateFilters };

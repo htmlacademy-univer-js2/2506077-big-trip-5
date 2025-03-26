@@ -1,10 +1,4 @@
-const SortType = {
-  DAY: 'day',
-  EVENT: 'event',
-  TIME: 'time',
-  PRICE: 'price',
-  OFFER: 'offer'
-};
+import { SortType } from '../const';
 
 const sortOptions = [
   { type: SortType.DAY, isDisabled: false },
@@ -15,7 +9,7 @@ const sortOptions = [
 ];
 
 const generateSort = (points) => {
-  if (points.length === 0) {
+  if (!points.length) {
     return sortOptions.map((option) => ({ ...option, isDisabled: true }));
   }
   return sortOptions;
