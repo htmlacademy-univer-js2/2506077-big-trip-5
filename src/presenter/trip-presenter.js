@@ -8,14 +8,16 @@ import { generateFilters } from '../mock/filter-data.js';
 import { messages } from '../mock/message-data.js';
 import { generateSort } from '../mock/sort-data.js';
 import RoutePointPresenter from './route-point-presenter.js';
-import { updatePoint } from '../utils.js';
-
+import { updatePoint, sortRoutePoints } from '../utils.js';
+import { SortType } from '../const.js';
 
 export default class TripPresenter {
-  #eventsListContainer = new EventList;
+  #eventsListContainer = new EventList();
   #routePointsModel = new RoutePointsModel();
   #routePointsPresenter = new Map();
   #routePoints = this.#routePointsModel.getRoutePoints();
+  #sortedRoutePoints = null;
+  #currentSortType = SortType.DAY;
 
   constructor() {
     this.filterContainer = document.querySelector('.trip-controls__filters');
@@ -41,7 +43,23 @@ export default class TripPresenter {
 
   #renderSort(routePoints) {
     const sort = generateSort(routePoints);
-    render(new SortView(sort), this.eventsContainer);
+    render(new SortView(sort, this.#onSortTypeChange), this.eventsContainer);
+  }
+
+  #onSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+
+    this.#currentSortType = sortType;
+    this.#sortedRoutePoints = sortRoutePoints(this.#routePoints, this.#currentSortType);
+    this.#clearRoutePointsList();
+    this.#renderRoutePointsList(this.#sortedRoutePoints);
+  };
+
+  #clearRoutePointsList() {
+    this.#routePointsPresenter.forEach((presenter) => presenter.destroy());
+    this.#routePointsPresenter.clear();
   }
 
   #renderEmptyList() {

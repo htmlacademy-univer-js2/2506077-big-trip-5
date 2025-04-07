@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { SortType } from './const';
 
 const formatDate = (date) => {
   const formattedDate = date.toLocaleDateString('en-GB', { month: 'short', day: 'numeric' });
@@ -55,6 +56,21 @@ const isPastPoint = (point) => dayjs().isAfter(point.dateTo, 'minute');
 
 const updatePoint = (points, updatedPoint) => points.map((point) => point.id === updatedPoint.id ? updatedPoint : point);
 
+const sortRoutePoints = (points, sortType) => {
+  const sortedPoints = [...points];
+
+  switch (sortType) {
+    case SortType.DAY:
+      return sortedPoints.sort((a, b) => new Date(a.dateFrom) - new Date(b.dateFrom));
+    case SortType.TIME:
+      return sortedPoints.sort((a, b) => (b.dateTo - b.dateFrom) - (a.dateTo - a.dateFrom));
+    case SortType.PRICE:
+      return sortedPoints.sort((a, b) => b.price - a.price);
+    default:
+      return sortedPoints;
+  }
+};
+
 export {
   formatDate,
   formatTime,
@@ -65,5 +81,6 @@ export {
   isFuturePoint,
   isPresentPoint,
   isPastPoint,
-  updatePoint
+  updatePoint,
+  sortRoutePoints
 };
