@@ -56,7 +56,8 @@ export default class RoutePointPresenter {
   }
 
   #onFavoriteClick(routePoint) {
-    routePoint.isFavorite = !routePoint.isFavorite;
+    // eslint-disable-next-line camelcase
+    routePoint.is_favorite = !routePoint.is_favorite;
     this.#onDataChange(routePoint);
     this.#updateRoutePoint();
   }

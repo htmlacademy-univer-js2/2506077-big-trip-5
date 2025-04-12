@@ -1,4 +1,5 @@
 import { render } from '../framework/render.js';
+import TripInfo from '../view/trip-info-view.js';
 import FilterView from '../view/filter-view.js';
 import SortView from '../view/sort-view.js';
 import EventList from '../view/event-list-view.js';
@@ -10,6 +11,7 @@ import { generateSort } from '../mock/sort-data.js';
 import RoutePointPresenter from './route-point-presenter.js';
 import { updatePoint, sortRoutePoints } from '../utils.js';
 import { SortType } from '../const.js';
+import { RenderPosition } from '../framework/render.js';
 
 export default class TripPresenter {
   #eventsListContainer = new EventList();
@@ -20,11 +22,13 @@ export default class TripPresenter {
   #currentSortType = SortType.DAY;
 
   constructor() {
+    this.tripInfoContainer = document.querySelector('.trip-main');
     this.filterContainer = document.querySelector('.trip-controls__filters');
     this.eventsContainer = document.querySelector('.trip-events');
   }
 
   init() {
+    this.#renderTripInfo();
     this.#renderFilters(this.#routePoints);
     this.#renderSort(this.#routePoints);
 
@@ -35,6 +39,8 @@ export default class TripPresenter {
 
     this.#renderRoutePointsList(this.#routePoints);
   }
+
+  #renderTripInfo = () => render(new TripInfo(), this.tripInfoContainer, RenderPosition.AFTERBEGIN);
 
   #renderFilters(routePoints) {
     const filters = generateFilters(routePoints);
@@ -70,7 +76,7 @@ export default class TripPresenter {
     render(this.#eventsListContainer, this.eventsContainer);
 
     routePoints.forEach((routePoint) => {
-      if (routePoint.id && routePoint.dateFrom && routePoint.type && routePoint.city) {
+      if (routePoint.id && routePoint.date_from && routePoint.type) {
         this.#renderRoutePoint(routePoint);
       }
     });
