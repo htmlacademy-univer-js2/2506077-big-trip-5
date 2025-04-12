@@ -1,260 +1,344 @@
-const offersByType = {
-  Flight: [
-    { id: 1, type: 'Flight', name: 'Priority Boarding', price: 10 },
-    { id: 2, type: 'Flight', name: 'Extra Luggage', price: 25 },
-    { id: 3, type: 'Flight', name: 'Meal Service', price: 15 }
-  ],
-  Train: [
-    { id: 4, type: 'Train', name: 'Window Seat', price: 15 },
-    { id: 5, type: 'Train', name: 'Extra Legroom', price: 20 },
-    { id: 6, type: 'Train', name: 'Quiet Zone', price: 10 }
-  ],
-  Bus: [
-    { id: 7, type: 'Bus', name: 'Food Package', price: 30 },
-    { id: 8, type: 'Bus', name: 'Wi-Fi', price: 5 },
-    { id: 9, type: 'Bus', name: 'Power Outlet', price: 3 }
-  ],
-  Sightseeing: [
-    { id: 10, type: 'Sightseeing', name: 'Guide', price: 20 },
-    { id: 11, type: 'Sightseeing', name: 'Skip the Line', price: 40 },
-    { id: 12, type: 'Sightseeing', name: 'VIP Access', price: 50 }
-  ],
-  Taxi: [
-    { id: 13, type: 'Taxi', name: 'VIP Transfer', price: 50 },
-    { id: 14, type: 'Taxi', name: 'Pet-Friendly', price: 15 },
-    { id: 15, type: 'Taxi', name: 'Airport Shuttle', price: 20 }
-  ],
-  Ship: [
-    { id: 16, type: 'Ship', name: 'Ocean View', price: 30 },
-    { id: 17, type: 'Ship', name: 'Premium Cabin', price: 100 },
-    { id: 18, type: 'Ship', name: 'All-Inclusive', price: 150 }
-  ],
-  Drive: [
-    { id: 19, type: 'Drive', name: 'Luxury Car', price: 75 },
-    { id: 20, type: 'Drive', name: 'GPS Rental', price: 10 },
-    { id: 21, type: 'Drive', name: 'Child Seat', price: 5 }
-  ],
-  'Check-in': [
-    { id: 22, type: 'Check-in', name: 'Express Check-in', price: 5 },
-    { id: 23, type: 'Check-in', name: 'Priority Check-in', price: 15 },
-    { id: 24, type: 'Check-in', name: 'Seat Selection', price: 10 }
-  ],
-  Restaurant: [
-    { id: 25, type: 'Restaurant', name: 'Wine Pairing', price: 30 },
-    { id: 26, type: 'Restaurant', name: 'Tasting Menu', price: 50 },
-    { id: 27, type: 'Restaurant', name: 'Chef’s Special', price: 40 }
-  ]
-};
+import { generateRandomId } from '../utils';
 
 const destinations = [
   {
-    id: 1,
-    name: 'Barcelona',
-    description: `
+    'id': generateRandomId(),
+    'description': `
       Cras aliquet varius magna, non porta ligula feugiat eget.
       Fusce tristique felis at fermentum pharetra.
       Aliquam id orci ut lectus varius viverra.
       Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.
     `,
-    photos: ['https://loremflickr.com/248/152?random=1', 'https://loremflickr.com/248/152?random=2', 'https://loremflickr.com/248/152?random=3']
+    'name': 'Barcelona',
+    'pictures': [
+      {
+        'src': 'https://loremflickr.com/248/152?random=1',
+        'description': 'Barcelona 1'
+      },
+      {
+        'src': 'https://loremflickr.com/248/152?random=2',
+        'description': 'Barcelona 2'
+      },
+      {
+        'src': 'https://loremflickr.com/248/152?random=3',
+        'description': 'Barcelona 3'
+      }
+    ]
   },
   {
-    id: 2,
-    name: 'Tokyo',
-    description: `
+    'id': generateRandomId(),
+    'description': `
       Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.
       Sed sed nisi sed augue convallis suscipit in sed felis.
       Aliquam erat volutpat.
     `,
-    photos: ['https://loremflickr.com/248/152?random=4']
+    'name': 'Tokyo',
+    'pictures': [
+      {
+        'src': 'https://loremflickr.com/248/152?random=4',
+        'description': 'Tokyo 1'
+      }
+    ]
   },
   {
-    id: 3,
-    name: 'New York',
-    description: `
+    'id': generateRandomId(),
+    'description': `
       Nunc fermentum tortor ac porta dapibus.
       In rutrum ac purus sit amet tempus.
     `,
-    photos: ['https://loremflickr.com/248/152?random=5', 'https://loremflickr.com/248/152?random=6']
+    'name': 'New York',
+    'pictures': [
+      {
+        'src': 'https://loremflickr.com/248/152?random=5',
+        'description': 'New York 1'
+      },
+      {
+        'src': 'https://loremflickr.com/248/152?random=6',
+        'description': 'New York 2'
+      }
+    ]
   },
   {
-    id: 4,
-    name: 'Sydney',
-    description: `
+    'id': generateRandomId(),
+    'description': `
       Lorem ipsum dolor sit amet, consectetur adipiscing elit.
       Cras aliquet varius magna, non porta ligula feugiat eget.
     `,
-    photos: []
+    'name': 'Sydney',
+    'pictures': []
   },
   {
-    id: 5,
-    name: 'Paris',
-    description: `
+    'id': generateRandomId(),
+    'description': `
       Fusce tristique felis at fermentum pharetra.
     `,
-    photos: ['https://loremflickr.com/248/152?random=7', 'https://loremflickr.com/248/152?random=8', 'https://loremflickr.com/248/152?random=9']
+    'name': 'Paris',
+    'pictures': [
+      {
+        'src': 'https://loremflickr.com/248/152?random=7',
+        'description': 'Paris 1'
+      },
+      {
+        'src': 'https://loremflickr.com/248/152?random=8',
+        'description': 'Paris 2'
+      },
+      {
+        'src': 'https://loremflickr.com/248/152?random=9',
+        'description': 'Paris 3'
+      }
+    ]
   },
   {
-    id: 6,
-    name: 'Rome',
-    description: `
+    'id': generateRandomId(),
+    'description': `
       Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.
       Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.
     `,
-    photos: ['https://loremflickr.com/248/152?random=10']
+    'name': 'Rome',
+    'pictures': [
+      {
+        'src': 'https://loremflickr.com/248/152?random=10',
+        'description': 'Rome 1'
+      }
+    ]
   },
   {
-    id: 7,
-    name: 'London',
-    description: `
+    'id': generateRandomId(),
+    'description': `
       Aliquam erat volutpat.
       Nunc fermentum tortor ac porta dapibus.
     `,
-    photos: ['https://loremflickr.com/248/152?random=11', 'https://loremflickr.com/248/152?random=12']
+    'name': 'London',
+    'pictures': [
+      {
+        'src': 'https://loremflickr.com/248/152?random=11',
+        'description': 'London 1'
+      },
+      {
+        'src': 'https://loremflickr.com/248/152?random=12',
+        'description': 'London 2'
+      }
+    ]
   },
   {
-    id: 8,
-    name: 'Berlin',
-    description: `
+    'id': generateRandomId(),
+    'description': `
       Aliquam id orci ut lectus varius viverra.
-
       Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.
       Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.
       Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.
       Sed sed nisi sed augue convallis suscipit in sed felis.
     `,
-    photos: ['https://loremflickr.com/248/152?random=13']
+    'name': 'Berlin',
+    'pictures': [
+      {
+        'src': 'https://loremflickr.com/248/152?random=13',
+        'description': 'Berlin 1'
+      }
+    ]
   },
   {
-    id: 9,
-    name: 'Amsterdam',
-    description: `
+    'id': generateRandomId(),
+    'description': `
       Aliquam erat volutpat.
     `,
-    photos: ['https://loremflickr.com/248/152?random=14', 'https://loremflickr.com/248/152?random=15', 'https://loremflickr.com/248/152?random=16', 'https://loremflickr.com/248/152?random=17']
+    'name': 'Amsterdam',
+    'pictures': [
+      {
+        'src': 'https://loremflickr.com/248/152?random=14',
+        'description': 'Amsterdam 1'
+      },
+      {
+        'src': 'https://loremflickr.com/248/152?random=15',
+        'description': 'Amsterdam 2'
+      },
+      {
+        'src': 'https://loremflickr.com/248/152?random=16',
+        'description': 'Amsterdam 3'
+      },
+      {
+        'src': 'https://loremflickr.com/248/152?random=17',
+        'description': 'Amsterdam 4'
+      }
+    ]
+  }
+];
+
+const offersByType = [
+  {
+    'type': 'flight',
+    'offers': [
+      { 'id': generateRandomId(), 'title': 'Priority Boarding', 'price': 10 },
+      { 'id': generateRandomId(), 'title': 'Extra Luggage', 'price': 25 },
+      { 'id': generateRandomId(), 'title': 'Meal Service', 'price': 15 }
+    ]
+  },
+  {
+    'type': 'train',
+    'offers': [
+      { 'id': generateRandomId(), 'title': 'Window Seat', 'price': 15 },
+      { 'id': generateRandomId(), 'title': 'Extra Legroom', 'price': 20 },
+      { 'id': generateRandomId(), 'title': 'Quiet Zone', 'price': 10 }
+    ]
+  },
+  {
+    'type': 'bus',
+    'offers': [
+      { 'id': generateRandomId(), 'title': 'Food Package', 'price': 30 },
+      { 'id': generateRandomId(), 'title': 'Wi-Fi', 'price': 5 },
+      { 'id': generateRandomId(), 'title': 'Power Outlet', 'price': 3 }
+    ]
+  },
+  {
+    'type': 'sightseeing',
+    'offers': [
+      { 'id': generateRandomId(), 'title': 'Guide', 'price': 20 },
+      { 'id': generateRandomId(), 'title': 'Skip the Line', 'price': 40 },
+      { 'id': generateRandomId(), 'title': 'VIP Access', 'price': 50 }
+    ]
+  },
+  {
+    'type': 'taxi',
+    'offers': [
+      { 'id': generateRandomId(), 'title': 'VIP Transfer', 'price': 50 },
+      { 'id': generateRandomId(), 'title': 'Pet-Friendly', 'price': 15 },
+      { 'id': generateRandomId(), 'title': 'Airport Shuttle', 'price': 20 }
+    ]
+  },
+  {
+    'type': 'ship',
+    'offers': [
+      { 'id': generateRandomId(), 'title': 'Ocean View', 'price': 30 },
+      { 'id': generateRandomId(), 'title': 'Premium Cabin', 'price': 100 },
+      { 'id': generateRandomId(), 'title': 'All-Inclusive', 'price': 150 }
+    ]
+  },
+  {
+    'type': 'drive',
+    'offers': [
+      { 'id': generateRandomId(), 'title': 'Luxury Car', 'price': 75 },
+      { 'id': generateRandomId(), 'title': 'GPS Rental', 'price': 10 },
+      { 'id': generateRandomId(), 'title': 'Child Seat', 'price': 5 }
+    ]
+  },
+  {
+    'type': 'check-in',
+    'offers': [
+      { 'id': generateRandomId(), 'title': 'Express Check-in', 'price': 5 },
+      { 'id': generateRandomId(), 'title': 'Priority Check-in', 'price': 15 },
+      { 'id': generateRandomId(), 'title': 'Seat Selection', 'price': 10 }
+    ]
+  },
+  {
+    'type': 'restaurant',
+    'offers': [
+      { 'id': generateRandomId(), 'title': 'Wine Pairing', 'price': 30 },
+      { 'id': generateRandomId(), 'title': 'Tasting Menu', 'price': 50 },
+      { 'id': generateRandomId(), 'title': 'Chef’s Special', 'price': 40 }
+    ]
   }
 ];
 
 const mockRoutePoints = [
   {
-    id: 1,
-    dateFrom: new Date('2025-02-20T10:30:00'),
-    dateTo: new Date('2025-02-20T11:30:00'),
-    type: 'Flight',
-    city: 'Barcelona',
-    price: 1500,
-    availableOfferIds: [1, 2, 3],
-    selectedOfferIds: [1],
-    destinationId: 1,
-    isFavorite: true
+    'id': generateRandomId(),
+    'base_price': 1500,
+    'date_from': '2025-02-20T10:30:00.000Z',
+    'date_to': '2025-02-20T11:30:00.000Z',
+    'destination': destinations[0].id,
+    'is_favorite': true,
+    'offers': [offersByType[0].offers[0].id],
+    'type': 'flight'
   },
   {
-    id: 2,
-    dateFrom: new Date('2025-02-21T08:00:00'),
-    dateTo: new Date('2025-02-21T10:00:00'),
-    type: 'Train',
-    city: 'Tokyo',
-    price: 350,
-    availableOfferIds: [4, 5, 6],
-    selectedOfferIds: [5, 6],
-    destinationId: 2,
-    isFavorite: false
+    'id': generateRandomId(),
+    'base_price': 350,
+    'date_from': '2025-02-21T08:00:00.000Z',
+    'date_to': '2025-02-21T10:00:00.000Z',
+    'destination': destinations[1].id,
+    'is_favorite': false,
+    'offers': [offersByType[1].offers[1].id, offersByType[1].offers[2].id],
+    'type': 'train'
   },
   {
-    id: 3,
-    dateFrom: new Date('2025-03-08T07:00:00'),
-    dateTo: new Date('2025-03-08T09:00:00'),
-    type: 'Bus',
-    city: 'New York',
-    price: 80,
-    availableOfferIds: [7, 8, 9],
-    selectedOfferIds: [7],
-    destinationId: 3,
-    isFavorite: false
+    'id': generateRandomId(),
+    'base_price': 80,
+    'date_from': '2025-03-08T07:00:00.000Z',
+    'date_to': '2025-03-08T09:00:00.000Z',
+    'destination': destinations[2].id,
+    'is_favorite': false,
+    'offers': [offersByType[2].offers[0].id],
+    'type': 'bus'
   },
   {
-    id: 4,
-    dateFrom: new Date('2025-03-08T09:00:00'),
-    dateTo: new Date('2025-03-08T15:00:00'),
-    type: 'Sightseeing',
-    city: 'Sydney',
-    price: 750,
-    availableOfferIds: [10, 11, 12],
-    selectedOfferIds: [10, 12],
-    destinationId: 4,
-    isFavorite: true
+    'id': generateRandomId(),
+    'base_price': 750,
+    'date_from': '2025-03-08T09:00:00.000Z',
+    'date_to': '2025-03-08T15:00:00.000Z',
+    'destination': destinations[3].id,
+    'is_favorite': true,
+    'offers': [offersByType[3].offers[0].id, offersByType[3].offers[2].id],
+    'type': 'sightseeing'
   },
   {
-    id: 5,
-    dateFrom: new Date('2025-03-24T11:00:00'),
-    dateTo: new Date('2025-03-24T12:30:00'),
-    type: 'Taxi',
-    city: 'Paris',
-    price: 40,
-    availableOfferIds: [13, 14, 15],
-    selectedOfferIds: [13, 14, 15],
-    destinationId: 5,
-    isFavorite: false
+    'id': generateRandomId(),
+    'base_price': 40,
+    'date_from': '2025-03-24T11:00:00.000Z',
+    'date_to': '2025-03-24T12:30:00.000Z',
+    'destination': destinations[4].id,
+    'is_favorite': false,
+    'offers': [offersByType[4].offers[0].id, offersByType[4].offers[1].id, offersByType[4].offers[2].id],
+    'type': 'taxi'
   },
   {
-    id: 6,
-    dateFrom: new Date('2025-03-26T15:00:00'),
-    dateTo: new Date('2025-03-26T16:30:00'),
-    type: 'Ship',
-    city: 'Rome',
-    price: 600,
-    availableOfferIds: [16, 17, 18],
-    selectedOfferIds: [18],
-    destinationId: 6,
-    isFavorite: true
+    'id': generateRandomId(),
+    'base_price': 600,
+    'date_from': '2025-03-26T15:00:00.000Z',
+    'date_to': '2025-03-26T16:30:00.000Z',
+    'destination': destinations[5].id,
+    'is_favorite': true,
+    'offers': [offersByType[5].offers[2].id],
+    'type': 'ship'
   },
   {
-    id: 7,
-    dateFrom: new Date('2025-03-28T12:00:00'),
-    dateTo: new Date('2025-03-28T13:30:00'),
-    type: 'Drive',
-    city: 'London',
-    price: 350,
-    availableOfferIds: [19, 20, 21],
-    selectedOfferIds: [21],
-    destinationId: 7,
-    isFavorite: false
+    'id': generateRandomId(),
+    'base_price': 350,
+    'date_from': '2025-03-28T12:00:00.000Z',
+    'date_to': '2025-03-28T13:30:00.000Z',
+    'destination': destinations[6].id,
+    'is_favorite': false,
+    'offers': [offersByType[6].offers[2].id],
+    'type': 'drive'
   },
   {
-    id: 8,
-    dateFrom: new Date('2025-04-01T09:00:00'),
-    dateTo: new Date('2025-04-01T10:30:00'),
-    type: 'Check-in',
-    city: 'Berlin',
-    price: 200,
-    availableOfferIds: [22, 23, 24],
-    selectedOfferIds: [22, 23],
-    destinationId: 8,
-    isFavorite: true
+    'id': generateRandomId(),
+    'base_price': 200,
+    'date_from': '2025-04-01T09:00:00.000Z',
+    'date_to': '2025-04-01T10:30:00.000Z',
+    'destination': destinations[7].id,
+    'is_favorite': true,
+    'offers': [offersByType[7].offers[0].id, offersByType[7].offers[1].id],
+    'type': 'check-in'
   },
   {
-    id: 9,
-    dateFrom: new Date('2025-04-02T18:00:00'),
-    dateTo: new Date('2025-04-02T18:30:00'),
-    type: 'Restaurant',
-    city: 'Amsterdam',
-    price: 500,
-    availableOfferIds: [25, 26, 27],
-    selectedOfferIds: [26, 27],
-    destinationId: 9,
-    isFavorite: true
+    'id': generateRandomId(),
+    'base_price': 500,
+    'date_from': '2025-05-02T18:00:00.000Z',
+    'date_to': '2025-05-02T18:30:00.000Z',
+    'destination': destinations[8].id,
+    'is_favorite': true,
+    'offers': [offersByType[8].offers[1].id, offersByType[8].offers[2].id],
+    'type': 'restaurant'
   },
   {
-    id: 10,
-    dateFrom: null,
-    dateTo: null,
-    type: '',
-    city: '',
-    price: 0,
-    availableOfferIds: [],
-    selectedOfferIds: [],
-    destinationId: null,
-    isFavorite: false
+    'id': generateRandomId(),
+    'base_price': 0,
+    'date_from': null,
+    'date_to': null,
+    'destination': '',
+    'is_favorite': false,
+    'offers': [],
+    'type': ''
   }
 ];
 
