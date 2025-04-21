@@ -1,9 +1,9 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { formatDate, formatTime, formatDatetime, calculateDuration } from '../utils.js';
-import { offersByType } from '../mock/mock-route-data.js';
+import { offersByType, destinations } from '../mock/mock-route-data.js';
 
 const createRoutePointTemplate = (routePoint) => {
-  const { dateFrom, dateTo, type, city, price, availableOfferIds, selectedOfferIds, isFavorite } = routePoint;
+  const { base_price: basePrice, date_from: dateFrom, date_to: dateTo, destination, is_favorite: isFavorite, offers, type } = routePoint;
 
   const formattedDate = formatDate(dateFrom);
   const startTime = formatTime(dateFrom);
@@ -14,13 +14,16 @@ const createRoutePointTemplate = (routePoint) => {
   const datetimeTo = formatDatetime(dateTo, true);
 
   const durationValue = calculateDuration(dateFrom, dateTo);
+  const city = destinations.find((dest) => dest.id === destination).name;
 
-  const availableOffers = (offersByType[type] || []).filter((offer) => availableOfferIds.includes(offer.id));
-  const selectedOffers = availableOffers.filter((offer) => selectedOfferIds.includes(offer.id));
+  const availableOffers = offersByType.find((offer) => offer.type === type).offers;
+
+  const selectedOffers = availableOffers
+    .filter((offer) => offers.includes(offer.id));
 
   const offerItems = selectedOffers.map((offer) => `
     <li class="event__offer">
-      <span class="event__offer-title">${offer.name}</span>
+      <span class="event__offer-title">${offer.title}</span>
       &plus;&euro;&nbsp;
       <span class="event__offer-price">${offer.price}</span>
     </li>
@@ -31,7 +34,7 @@ const createRoutePointTemplate = (routePoint) => {
       <div class="event">
         <time class="event__date" datetime="${datetime}">${formattedDate}</time>
         <div class="event__type">
-          <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
+          <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
         </div>
         <h3 class="event__title">${type} ${city}</h3>
         <div class="event__schedule">
@@ -43,7 +46,7 @@ const createRoutePointTemplate = (routePoint) => {
           <p class="event__duration">${durationValue}</p>
         </div>
         <p class="event__price">
-          &euro;&nbsp;<span class="event__price-value">${price}</span>
+          &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
