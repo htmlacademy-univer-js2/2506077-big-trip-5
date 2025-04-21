@@ -1,6 +1,8 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { formatDateToCustomFormat } from '../utils.js';
 import { offersByType, destinations } from '../mock/mock-route-data.js';
+import flatpickr from 'flatpickr';
+import '../../node_modules/flatpickr/dist/flatpickr.css';
 
 const createEventFormTemplate = (routePoint) => {
   const { base_price: basePrice, date_from: dateFrom, date_to: dateTo, destination, offers, type } = routePoint;
@@ -188,6 +190,8 @@ export default class CreateEditEventView extends AbstractStatefulView {
 
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#eventDestinationChangeHandler);
 
+    this.#setDatepickerStart();
+    this.#setDatepickerEnd();
   }
 
   #closeEditButtonClickHandler = (evt) => {
@@ -217,4 +221,33 @@ export default class CreateEditEventView extends AbstractStatefulView {
       destination: newDestination ? newDestination.id : ''
     });
   };
+
+  #dateChangeHandler = (type, newDate) => {
+    this._setState({
+      [type]: newDate
+    });
+  };
+
+  #setDatepickerStart() {
+    const startDateInput = this.element.querySelector('#event-start-time-1');
+    flatpickr(startDateInput, {
+      dateFormat: 'd/m/y H:i',
+      enableTime: true,
+      'time_24hr': true,
+      defaultDate: this._state.date_from,
+      onChange: (date) => this.#dateChangeHandler('date_from', date[0])
+    });
+  }
+
+  #setDatepickerEnd() {
+    const endDateInput = this.element.querySelector('#event-end-time-1');
+    flatpickr(endDateInput, {
+      dateFormat: 'd/m/y H:i',
+      enableTime: true,
+      'time_24hr': true,
+      defaultDate: this._state.date_to,
+      onChange: (date) => this.#dateChangeHandler('date_to', date[0]),
+      minDate: this._state.date_from
+    });
+  }
 }
