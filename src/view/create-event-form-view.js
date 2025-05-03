@@ -1,10 +1,12 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { formatDateToCustomFormat } from '../utils.js';
 import { offersByType, destinations } from '../mock/mock-route-data.js';
+import { FormType } from '../const.js';
+import { UpdateType, UserAction } from '../const.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.css';
 
-const createEventFormTemplate = (routePoint) => {
+const createEventFormTemplate = (routePoint, formType) => {
   const { base_price: basePrice, date_from: dateFrom, date_to: dateTo, destination, offers, type } = routePoint;
 
   const startTime = dateFrom ? formatDateToCustomFormat(dateFrom) : '';
@@ -99,16 +101,7 @@ const createEventFormTemplate = (routePoint) => {
             </label>
             <input class="event__input event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city || ''}" placeholder="choose city" list="destination-list-1">
             <datalist id="destination-list-1">
-              <option value="Barcelona"></option>
-              <option value="Tokyo"></option>
-              <option value="New York"></option>
-              <option value="Sydney"></option>
-              <option value="Paris"></option>
-              <option value="Rome"></option>
-              <option value="London"></option>
-              <option value="Berlin"></option>
-              <option value="Amsterdam"></option>
-            </datalist>
+              ${destinations.map((dest) => `<option value="${dest.name}"></option>`).join('')}</datalist>
           </div>
 
           <div class="event__field-group event__field-group--time">
@@ -124,15 +117,19 @@ const createEventFormTemplate = (routePoint) => {
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice || ''}" placeholder="price">
+            <input class="event__input event__input--price" id="event-price-1" type="number" name="event-price" value="${basePrice || ''}" placeholder="price">
           </div>
 
-
-          <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-          <button class="event__reset-btn" type="reset">Delete</button>
-          <button class="event__rollup-btn" type="button">
-            <span class="visually-hidden">Open event</span>
-          </button>
+          ${formType === FormType.CREATE ? `
+            <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+            <button class="event__reset-btn" type="reset">Cancel</button>
+          ` : `
+            <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+            <button class="event__reset-btn" type="reset">Delete</button>
+            <button class="event__rollup-btn" type="button">
+              <span class="visually-hidden">Open event</span>
+            </button>
+          `}
         </header>
         <section class="event__details">
           ${offerItems ? `
@@ -165,24 +162,33 @@ const createEventFormTemplate = (routePoint) => {
 export default class CreateEditEventView extends AbstractStatefulView {
   #onCloseEditButtonClick = null;
   #onSubmitButtonClick = null;
+  #onDataChange = null;
+  #formType = null;
 
-  constructor(routePoint, onCloseEditButtonClick, onSubmitButtonClick) {
+  constructor(routePoint, onCloseEditButtonClick, onSubmitButtonClick, onDataChange, formType) {
     super();
     this._state = { ...routePoint };
     this.#onCloseEditButtonClick = onCloseEditButtonClick;
     this.#onSubmitButtonClick = onSubmitButtonClick;
+    this.#onDataChange = onDataChange;
+    this.#formType = formType;
 
     this._restoreHandlers();
   }
 
   get template() {
-    return createEventFormTemplate(this._state);
+    return createEventFormTemplate(this._state, this.#formType);
   }
 
   _restoreHandlers() {
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#closeEditButtonClickHandler);
-
     this.element.querySelector('.event__save-btn').addEventListener('click', this.#submitButtonClickHandler);
+
+    if (this.#formType === FormType.EDIT) {
+      this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#closeEditButtonClickHandler);
+      this.element.querySelector('.event__reset-btn').addEventListener('click', this.#deleteButtonClickHandler);
+    } else {
+      this.element.querySelector('.event__reset-btn').addEventListener('click', this.#closeEditButtonClickHandler);
+    }
 
     this.element.querySelectorAll('.event__type-input').forEach((input) => {
       input.addEventListener('change', this.#eventTypeChangeHandler);
@@ -193,6 +199,35 @@ export default class CreateEditEventView extends AbstractStatefulView {
     this.#setDatepickerStart();
     this.#setDatepickerEnd();
   }
+
+  getUpdatedPoint() {
+    const formElement = this.element.querySelector('form');
+    const formData = new FormData(formElement);
+
+    const selectedType = formData.get('event-type');
+    const selectedDestinationName = formData.get('event-destination');
+    const selectedDestination = destinations.find((dest) => dest.name === selectedDestinationName);
+    const selectedOffers = Array.from(formElement.querySelectorAll('.event__offer-checkbox:checked'))
+      .map((checkbox) => checkbox.id.replace('event-offer-', ''));
+
+    const dateFrom = this._state.date_from ? new Date(this._state.date_from) : null;
+    const dateTo = this._state.date_to ? new Date(this._state.date_to) : null;
+
+    return {
+      ...this._state,
+      'type': selectedType,
+      'destination': selectedDestination?.id || null,
+      'base_price': Number(formData.get('event-price')),
+      'date_from': dateFrom ? dateFrom.toISOString() : null,
+      'date_to': dateTo ? dateTo.toISOString() : null,
+      'offers': selectedOffers,
+    };
+  }
+
+  #deleteButtonClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onDataChange(UserAction.DELETE_POINT, UpdateType.MINOR, this._state);
+  };
 
   #closeEditButtonClickHandler = (evt) => {
     evt.preventDefault();

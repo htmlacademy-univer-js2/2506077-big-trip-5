@@ -80,6 +80,50 @@ const generateRandomId = (length = 8) => {
   return id;
 };
 
+const getTripInfo = (points, destinations, offersByType) => {
+  const validPoints = points.filter((point) =>
+    point.date_from && point.date_to && point.destination
+  );
+
+  if (!validPoints.length) {
+    return {
+      title: '',
+      dates: '',
+      cost: 0,
+    };
+  }
+
+  const sorted = [...validPoints].sort((a, b) => new Date(a.date_from) - new Date(b.date_from));
+
+  const cityNames = sorted.map((point) => {
+    const destination = destinations.find((d) => d.id === point.destination);
+    return destination?.name || '';
+  });
+
+  const uniqueCities = [...cityNames].filter(Boolean);
+
+  const title = uniqueCities.join('&nbsp;&mdash;&nbsp;');
+
+
+  const start = dayjs(sorted[0].date_from).format('D MMM');
+  const end = dayjs(sorted.at(-1).date_to).format('D MMM');
+  const dates = `${start}&nbsp;&mdash;&nbsp;${end}`;
+
+  const cost = validPoints.reduce((total, point) => {
+    const base = point.base_price || 0;
+
+    const offerGroup = offersByType.find((group) => group.type === point.type);
+    const availableOffers = offerGroup ? offerGroup.offers : [];
+
+    const selectedOffers = availableOffers.filter((offer) => point.offers.includes(offer.id));
+    const offersSum = selectedOffers.reduce((sum, offer) => sum + offer.price, 0);
+
+    return total + base + offersSum;
+  }, 0);
+
+  return { title, dates, cost };
+};
+
 export {
   formatDate,
   formatTime,
@@ -92,5 +136,6 @@ export {
   isPastPoint,
   updatePoint,
   sortRoutePoints,
-  generateRandomId
+  generateRandomId,
+  getTripInfo
 };
