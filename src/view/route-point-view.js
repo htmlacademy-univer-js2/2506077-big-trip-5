@@ -69,10 +69,11 @@ const createRoutePointTemplate = (routePoint) => {
 export default class RoutePointView extends AbstractView {
   #onOpenEditButtonClick = null;
   #onFavoriteClick = null;
+  #routePoint = null;
 
   constructor(routePoint, onOpenEditButtonClick, onFavoriteClick) {
     super();
-    this.routePoint = routePoint;
+    this.#routePoint = routePoint;
     this.#onOpenEditButtonClick = onOpenEditButtonClick;
     this.#onFavoriteClick = onFavoriteClick;
 
@@ -80,7 +81,7 @@ export default class RoutePointView extends AbstractView {
   }
 
   get template() {
-    return createRoutePointTemplate(this.routePoint);
+    return createRoutePointTemplate(this.#routePoint);
   }
 
   #setEventListeners() {
@@ -95,6 +96,6 @@ export default class RoutePointView extends AbstractView {
 
   #favoriteButtonClickHandler = (evt) => {
     evt.preventDefault();
-    this.#onFavoriteClick(this.routePoint);
+    this.#onFavoriteClick(this.#routePoint);
   };
 }

@@ -13,4 +13,4 @@ const generateFilters = (points) => Object.entries(filter).map(([filterType, fil
   count: filterFunction(points).length
 }));
 
-export { generateFilters };
+export { filter, generateFilters };
