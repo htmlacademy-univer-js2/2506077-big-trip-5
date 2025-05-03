@@ -55,8 +55,6 @@ const isPresentPoint = (point) => dayjs().isAfter(point.date_from, 'minute') && 
 
 const isPastPoint = (point) => dayjs().isAfter(point.date_to, 'minute');
 
-const updatePoint = (points, updatedPoint) => points.map((point) => point.id === updatedPoint.id ? updatedPoint : point);
-
 const sortRoutePoints = (points, sortType) => {
   const sortedPoints = [...points];
 
@@ -134,7 +132,6 @@ export {
   isFuturePoint,
   isPresentPoint,
   isPastPoint,
-  updatePoint,
   sortRoutePoints,
   generateRandomId,
   getTripInfo

@@ -1,10 +1,16 @@
-import { mockRoutePoints, offersByType, destinations } from '../mock/mock-route-data.js';
 import Observable from '../framework/observable.js';
+import { UpdateType } from '../const.js';
 
 export default class RoutePointsModel extends Observable {
-  #points = [...mockRoutePoints];
-  #allOffers = [...offersByType];
-  #allDestinations = [...destinations];
+  #points = [];
+  #allOffers = [];
+  #allDestinations = [];
+  #eventsApiService = null;
+
+  constructor(eventsApiService) {
+    super();
+    this.#eventsApiService = eventsApiService;
+  }
 
   get points() {
     this.#sortPointsByDate();
@@ -17,6 +23,28 @@ export default class RoutePointsModel extends Observable {
 
   get destinations() {
     return this.#allDestinations;
+  }
+
+  async init() {
+    try {
+      const [points, offers, dests] = await Promise.all([
+        this.#eventsApiService.points,
+        this.#eventsApiService.offers,
+        this.#eventsApiService.destinations,
+      ]);
+
+      this.#points = points;
+      this.#allOffers = offers;
+      this.#allDestinations = dests;
+
+      this._notify(UpdateType.INIT);
+    } catch (error) {
+      this.#points = [];
+      this.#allOffers = [];
+      this.#allDestinations = [];
+
+      this._notify(UpdateType.ERROR);
+    }
   }
 
   setPoints(updateType, update) {
@@ -46,11 +74,25 @@ export default class RoutePointsModel extends Observable {
     this._notify(updateType, update);
   }
 
-  updatePoint(updateType, update) {
+  async updatePoint(updateType, update) {
     const index = this.#points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {
       throw new Error('Can\'t update unexisting Point');
+    }
+
+    try {
+      const updatedEvent = await this.#eventsApiService.updatePoint(update);
+
+      this.#points = [
+        ...this.#points.slice(0, index),
+        updatedEvent,
+        ...this.#points.slice(index + 1),
+      ];
+
+      this._notify(updateType, updatedEvent);
+    } catch(error) {
+      throw new Error('Can\'t update Point');
     }
 
     this.#points = [
