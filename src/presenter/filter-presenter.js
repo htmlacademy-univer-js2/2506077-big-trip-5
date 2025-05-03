@@ -1,7 +1,7 @@
 import { render, replace, remove } from '../framework/render.js';
 import FilterView from '../view/filter-view.js';
 import { UpdateType } from '../const.js';
-import { generateFilters } from '../mock/filter-data.js';
+import { generateFilters } from '../filter-sort-data/filter-data.js';
 
 export default class FilterPresenter {
   #filterContainer = null;
@@ -19,6 +19,10 @@ export default class FilterPresenter {
   }
 
   init() {
+    if (!this.#routePointsModel.points || !this.#routePointsModel.points.length) {
+      return;
+    }
+
     const filters = generateFilters(this.#routePointsModel.points);
     const currentFilterType = this.#filterModel.filter;
     const prevComponent = this.#filterComponent;
