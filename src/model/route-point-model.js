@@ -47,31 +47,21 @@ export default class RoutePointsModel extends Observable {
     }
   }
 
-  setPoints(updateType, update) {
-    this.#points = [...update];
-    this.#sortPointsByDate();
-    this._notify(updateType, update);
-  }
+  async addPoint(updateType, update) {
+    try {
+      const newPoint = await this.#eventsApiService.addPoint(update);
 
-  addPoint(updateType, update) {
-    if (
-      !update.type ||
-      !update.base_price ||
-      !update.date_from ||
-      !update.date_to ||
-      !update.destination
-    ) {
-      return;
+      this.#points = [
+        newPoint,
+        ...this.#points
+      ];
+
+      this.#sortPointsByDate();
+
+      this._notify(updateType, newPoint);
+    } catch (error) {
+      throw new Error('Can\'t add Point');
     }
-
-    this.#points = [
-      update,
-      ...this.#points,
-    ];
-
-    this.#sortPointsByDate();
-
-    this._notify(updateType, update);
   }
 
   async updatePoint(updateType, update) {
@@ -90,37 +80,35 @@ export default class RoutePointsModel extends Observable {
         ...this.#points.slice(index + 1),
       ];
 
+      this.#sortPointsByDate();
+
       this._notify(updateType, updatedEvent);
-    } catch(error) {
+    } catch (error) {
       throw new Error('Can\'t update Point');
     }
-
-    this.#points = [
-      ...this.#points.slice(0, index),
-      update,
-      ...this.#points.slice(index + 1),
-    ];
-
-    this.#sortPointsByDate();
-
-    this._notify(updateType, update);
   }
 
-  deletePoint(updateType, update) {
+  async deletePoint(updateType, update) {
     const index = this.#points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {
       throw new Error('Can\'t delete unexisting Point');
     }
 
-    this.#points = [
-      ...this.#points.slice(0, index),
-      ...this.#points.slice(index + 1),
-    ];
+    try {
+      await this.#eventsApiService.deletePoint(update);
 
-    this.#sortPointsByDate();
+      this.#points = [
+        ...this.#points.slice(0, index),
+        ...this.#points.slice(index + 1),
+      ];
 
-    this._notify(updateType, update);
+      this.#sortPointsByDate();
+
+      this._notify(updateType, update);
+    } catch (error) {
+      throw new Error('Can\'t delete Point');
+    }
   }
 
   #sortPointsByDate() {

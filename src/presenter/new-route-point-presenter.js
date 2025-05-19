@@ -1,16 +1,20 @@
 import CreateEditEventView from '../view/create-event-form-view.js';
 import { render, remove, RenderPosition } from '../framework/render.js';
 import { UserAction, UpdateType, FormType, EmptyPoint } from '../const.js';
-import { generateRandomId, isEscapeKey } from '../utils.js';
+import { isEscapeKey } from '../utils.js';
 
 export default class NewRoutePointPresenter {
   #formComponent = null;
   #container = null;
   #onDataChange = null;
   #onDestroy = null;
+  #destinations = null;
+  #offersByType = null;
 
-  constructor(container, onDataChange, onDestroy) {
+  constructor(container, destinations, offers, onDataChange, onDestroy) {
     this.#container = container;
+    this.#destinations = destinations;
+    this.#offersByType = offers;
     this.#onDataChange = onDataChange;
     this.#onDestroy = onDestroy;
   }
@@ -22,6 +26,8 @@ export default class NewRoutePointPresenter {
 
     this.#formComponent = new CreateEditEventView(
       { ...EmptyPoint },
+      this.#destinations,
+      this.#offersByType,
       this.destroy,
       this.#onFormSubmit,
       this.#onDataChange,
@@ -49,16 +55,22 @@ export default class NewRoutePointPresenter {
     return this.#formComponent !== null;
   }
 
-  #onFormSubmit = () => {
+  #onFormSubmit = async () => {
     const newPoint = this.#formComponent.getUpdatedPoint();
 
-    this.#onDataChange(
-      UserAction.ADD_POINT,
-      UpdateType.MINOR,
-      { id: generateRandomId(), ...newPoint }
-    );
+    this.#formComponent.setSaving();
 
-    this.destroy();
+    try {
+      await this.#onDataChange(
+        UserAction.ADD_POINT,
+        UpdateType.MINOR,
+        { ...newPoint }
+      );
+
+      this.destroy();
+    } catch (error) {
+      this.#formComponent.setAborting();
+    }
   };
 
   #onEscKeyDown = (evt) => {

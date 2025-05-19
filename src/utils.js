@@ -19,7 +19,7 @@ const formatDatetime = (date, withTime = false) => {
 };
 
 const calculateDuration = (dateFrom, dateTo) => {
-  const duration = (new Date(dateTo) - new Date(dateFrom)) / 60000;
+  const duration = Math.round((new Date(dateTo) - new Date(dateFrom)) / 60000);
 
   if (duration < 60) {
     return `${duration}M`;
@@ -70,14 +70,6 @@ const sortRoutePoints = (points, sortType) => {
   }
 };
 
-const generateRandomId = (length = 8) => {
-  let id = '';
-  for (let i = 0; i < length; i++) {
-    id += Math.floor(Math.random() * 10);
-  }
-  return id;
-};
-
 const getTripInfo = (points, destinations, offersByType) => {
   const validPoints = points.filter((point) =>
     point.date_from && point.date_to && point.destination
@@ -98,10 +90,14 @@ const getTripInfo = (points, destinations, offersByType) => {
     return destination?.name || '';
   });
 
-  const uniqueCities = [...cityNames].filter(Boolean);
+  const cities = [...cityNames].filter(Boolean);
 
-  const title = uniqueCities.join('&nbsp;&mdash;&nbsp;');
-
+  let title = '';
+  if (cities.length <= 3) {
+    title = cities.join('&nbsp;&mdash;&nbsp;');
+  } else {
+    title = `${cities[0]}&nbsp;&mdash;&nbsp; ... &nbsp;&mdash;&nbsp;${cities.at(-1)}`;
+  }
 
   const start = dayjs(sorted[0].date_from).format('D MMM');
   const end = dayjs(sorted.at(-1).date_to).format('D MMM');
@@ -133,6 +129,5 @@ export {
   isPresentPoint,
   isPastPoint,
   sortRoutePoints,
-  generateRandomId,
   getTripInfo
 };

@@ -215,8 +215,7 @@ main {
   margin-bottom: 4px;
   font-weight: 800;
   font-size: 17px;
-  line-height: 21px;
-  word-wrap: break-word; }
+  line-height: 21px; }
 
 .trip-info__dates {
   margin: 0;
