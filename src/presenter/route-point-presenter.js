@@ -13,12 +13,16 @@ export default class RoutePointPresenter {
   #onModeChange = null;
   #mode = Mode.DEFAULT;
   #isNewPointFormOpen = null;
+  #destinations = null;
+  #offers = null;
 
-  constructor(eventsListContainer, onDataChange, onModeChange, isNewPointFormOpen) {
+  constructor(eventsListContainer, onDataChange, onModeChange, isNewPointFormOpen, destinations, offers) {
     this.#eventsListContainer = eventsListContainer;
     this.#onDataChange = onDataChange;
     this.#onModeChange = onModeChange;
     this.#isNewPointFormOpen = isNewPointFormOpen;
+    this.#destinations = destinations;
+    this.#offers = offers;
   }
 
   init(routePoint) {
@@ -42,12 +46,16 @@ export default class RoutePointPresenter {
 
     this.#point = new RoutePointView(
       this.#routePoint,
+      this.#destinations,
+      this.#offers,
       this.#onOpenEditButtonClick,
       this.#onFavoriteClick.bind(this)
     );
 
     this.#editPoint = new CreateEditEventView(
       this.#routePoint,
+      this.#destinations,
+      this.#offers,
       this.#onCloseEditButtonClick,
       this.#onSubmitButtonClick,
       this.#onDataChange,

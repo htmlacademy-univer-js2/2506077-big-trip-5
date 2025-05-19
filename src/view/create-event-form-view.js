@@ -1,12 +1,10 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { formatDateToCustomFormat } from '../utils.js';
-import { offersByType, destinations } from '../mock/mock-route-data.js';
-import { FormType } from '../const.js';
-import { UpdateType, UserAction } from '../const.js';
+import { FormType, UpdateType, UserAction } from '../const.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.css';
 
-const createEventFormTemplate = (routePoint, formType) => {
+const createEventFormTemplate = (routePoint, destinations, offersByType, formType) => {
   const { base_price: basePrice, date_from: dateFrom, date_to: dateTo, destination, offers, type } = routePoint;
 
   const startTime = dateFrom ? formatDateToCustomFormat(dateFrom) : '';
@@ -164,8 +162,10 @@ export default class CreateEditEventView extends AbstractStatefulView {
   #onSubmitButtonClick = null;
   #onDataChange = null;
   #formType = null;
+  #destinations = null;
+  #offersByType = null;
 
-  constructor(routePoint, onCloseEditButtonClick, onSubmitButtonClick, onDataChange, formType) {
+  constructor(routePoint, destinations, offers, onCloseEditButtonClick, onSubmitButtonClick, onDataChange, formType) {
     super();
     this._state = { ...routePoint };
     this.#onCloseEditButtonClick = onCloseEditButtonClick;
@@ -173,11 +173,14 @@ export default class CreateEditEventView extends AbstractStatefulView {
     this.#onDataChange = onDataChange;
     this.#formType = formType;
 
+    this.#destinations = destinations;
+    this.#offersByType = offers;
+
     this._restoreHandlers();
   }
 
   get template() {
-    return createEventFormTemplate(this._state, this.#formType);
+    return createEventFormTemplate(this._state, this.#destinations, this.#offersByType, this.#formType);
   }
 
   _restoreHandlers() {
@@ -206,7 +209,7 @@ export default class CreateEditEventView extends AbstractStatefulView {
 
     const selectedType = formData.get('event-type');
     const selectedDestinationName = formData.get('event-destination');
-    const selectedDestination = destinations.find((dest) => dest.name === selectedDestinationName);
+    const selectedDestination = this.#destinations.find((dest) => dest.name === selectedDestinationName);
     const selectedOffers = Array.from(formElement.querySelectorAll('.event__offer-checkbox:checked'))
       .map((checkbox) => checkbox.id.replace('event-offer-', ''));
 
@@ -251,7 +254,7 @@ export default class CreateEditEventView extends AbstractStatefulView {
   #eventDestinationChangeHandler = (evt) => {
     evt.preventDefault();
     const targetDestination = evt.target.value.toLowerCase();
-    const newDestination = destinations.find((dest) => dest.name.toLowerCase() === targetDestination);
+    const newDestination = this.#destinations.find((dest) => dest.name.toLowerCase() === targetDestination);
     this.updateElement({
       destination: newDestination ? newDestination.id : ''
     });

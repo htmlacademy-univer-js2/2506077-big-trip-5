@@ -3,29 +3,27 @@ import FilterPresenter from './presenter/filter-presenter.js';
 import RoutePointsModel from './model/route-point-model.js';
 import FilterModel from './model/filter-model.js';
 import NewPointButtonPresenter from './presenter/new-point-button-presenter.js';
+import PointsApiService from './service/api-service.js';
+import { END_POINT, AUTHORIZATION } from './const.js';
 
-const routePointsModel = new RoutePointsModel();
+const pointsApiService = new PointsApiService(END_POINT, AUTHORIZATION);
+const routePointsModel = new RoutePointsModel(pointsApiService);
 const filterModel = new FilterModel();
 const newPointButton = new NewPointButtonPresenter(
   document.querySelector('.trip-main')
 );
 
-const tripPresenter = new TripPresenter(
-  routePointsModel,
-  filterModel,
-  newPointButton
-);
+routePointsModel.init();
 
-const handleNewPointPuttonClick = () => {
-  tripPresenter.createPoint();
-  newPointButton.disableButton();
-};
-
-new FilterPresenter(
+const filterPresenter = new FilterPresenter(
   document.querySelector('.trip-controls__filters'),
   filterModel,
   routePointsModel
-).init();
+);
 
-newPointButton.init(handleNewPointPuttonClick);
-tripPresenter.init();
+new TripPresenter(
+  routePointsModel,
+  filterModel,
+  newPointButton,
+  filterPresenter
+).init();

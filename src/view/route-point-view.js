@@ -1,8 +1,7 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { formatDate, formatTime, formatDatetime, calculateDuration } from '../utils.js';
-import { offersByType, destinations } from '../mock/mock-route-data.js';
 
-const createRoutePointTemplate = (routePoint) => {
+const createRoutePointTemplate = (routePoint, destinations, offersByType) => {
   const { base_price: basePrice, date_from: dateFrom, date_to: dateTo, destination, is_favorite: isFavorite, offers, type } = routePoint;
 
   const formattedDate = formatDate(dateFrom);
@@ -70,10 +69,15 @@ export default class RoutePointView extends AbstractView {
   #onOpenEditButtonClick = null;
   #onFavoriteClick = null;
   #routePoint = null;
+  #destinations = null;
+  #offersByType = null;
 
-  constructor(routePoint, onOpenEditButtonClick, onFavoriteClick) {
+  constructor(routePoint, destinations, offers, onOpenEditButtonClick, onFavoriteClick) {
     super();
     this.#routePoint = routePoint;
+    this.#destinations = destinations;
+    this.#offersByType = offers;
+
     this.#onOpenEditButtonClick = onOpenEditButtonClick;
     this.#onFavoriteClick = onFavoriteClick;
 
@@ -81,7 +85,7 @@ export default class RoutePointView extends AbstractView {
   }
 
   get template() {
-    return createRoutePointTemplate(this.#routePoint);
+    return createRoutePointTemplate(this.#routePoint, this.#destinations, this.#offersByType);
   }
 
   #setEventListeners() {
