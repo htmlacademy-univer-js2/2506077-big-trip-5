@@ -114,7 +114,7 @@ const createEventFormTemplate = (routePoint, destinations, offersByType, formTyp
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input event__input--price" id="event-price-1" type="number" max="100000" name="event-price" value="${basePrice || ''}" placeholder="price">
+            <input class="event__input event__input--price" id="event-price-1" type="number" max="100000" name="event-price" value="${basePrice}" placeholder="price">
           </div>
 
           ${formType === FormType.CREATE ? `
