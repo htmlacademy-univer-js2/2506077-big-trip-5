@@ -30,6 +30,8 @@ export default class TripPresenter {
   #loadComponent = null;
   #errorComponent = null;
   #filterPresenter = null;
+  #destinations = null;
+  #offersByType = null;
 
   constructor(routePointsModel, filterModel, newPointButtonComponent, filterPresenter) {
     this.#routePointsModel = routePointsModel;
@@ -40,12 +42,6 @@ export default class TripPresenter {
     this.tripInfoContainer = document.querySelector('.trip-main');
     this.filterContainer = document.querySelector('.trip-controls__filters');
     this.eventsContainer = document.querySelector('.trip-events');
-
-    this.#newRoutePointPresenter = new NewRoutePointPresenter(
-      this.#eventsListContainer.element,
-      this.#onDataChange,
-      this.#onNewPointFormClose
-    );
 
     this.#routePointsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
@@ -238,6 +234,17 @@ export default class TripPresenter {
         this.#renderContent();
         break;
       case UpdateType.INIT:
+        this.#destinations = this.#routePointsModel.destinations;
+        this.#offersByType = this.#routePointsModel.offers;
+
+        this.#newRoutePointPresenter = new NewRoutePointPresenter(
+          this.#eventsListContainer.element,
+          this.#destinations,
+          this.#offersByType,
+          this.#onDataChange,
+          this.#onNewPointFormClose
+        );
+
         this.#removeLoadingComponent();
         this.#renderSort(this.#routePoints);
         this.#renderTripInfo();
