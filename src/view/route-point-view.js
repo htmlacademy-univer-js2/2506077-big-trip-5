@@ -1,5 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { formatDate, formatTime, formatDatetime, calculateDuration } from '../utils.js';
+import { SHAKE_DELAY } from '../const.js';
 
 const createRoutePointTemplate = (routePoint, destinations, offersByType) => {
   const { base_price: basePrice, date_from: dateFrom, date_to: dateTo, destination, is_favorite: isFavorite, offers, type } = routePoint;
@@ -98,8 +99,19 @@ export default class RoutePointView extends AbstractView {
     this.#onOpenEditButtonClick();
   };
 
-  #favoriteButtonClickHandler = (evt) => {
+  #setAborting() {
+    this.element.classList.add('head-shake');
+    setTimeout(() => {
+      this.element.classList.remove('head-shake');
+    }, SHAKE_DELAY);
+  }
+
+  #favoriteButtonClickHandler = async (evt) => {
     evt.preventDefault();
-    this.#onFavoriteClick(this.#routePoint);
+    try {
+      await this.#onFavoriteClick(this.#routePoint);
+    } catch (error) {
+      this.#setAborting();
+    }
   };
 }

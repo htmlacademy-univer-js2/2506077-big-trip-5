@@ -6,9 +6,11 @@ const createTripInfoTemplate = ({ title, dates, cost }) => `
       <h1 class="trip-info__title">${title}</h1>
       <p class="trip-info__dates">${dates}</p>
     </div>
+    ${cost ? `
     <p class="trip-info__cost">
       Total: &euro;&nbsp;<span class="trip-info__cost-value">${cost}</span>
     </p>
+    ` : ''}
   </section>
 `;
 

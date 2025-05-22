@@ -1,6 +1,8 @@
-const AUTHORIZATION = 'Basic b5v43v534uiiyv';
+const AUTHORIZATION = 'Basic asd6dsa67das';
 
 const END_POINT = 'https://24.objects.htmlacademy.pro/big-trip';
+
+const SHAKE_DELAY = 600;
 
 const FilterType = {
   EVERYTHING: 'EVERYTHING',
@@ -65,4 +67,4 @@ const Method = {
   DELETE: 'DELETE',
 };
 
-export { AUTHORIZATION, END_POINT, FilterType, SortType, Mode, UpdateType, UserAction, EmptyListMessage, FormType, EmptyPoint, Method };
+export { AUTHORIZATION, END_POINT, SHAKE_DELAY, FilterType, SortType, Mode, UpdateType, UserAction, EmptyListMessage, FormType, EmptyPoint, Method };

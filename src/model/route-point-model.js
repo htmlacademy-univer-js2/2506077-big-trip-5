@@ -48,20 +48,16 @@ export default class RoutePointsModel extends Observable {
   }
 
   async addPoint(updateType, update) {
-    try {
-      const newPoint = await this.#eventsApiService.addPoint(update);
+    const newPoint = await this.#eventsApiService.addPoint(update);
 
-      this.#points = [
-        newPoint,
-        ...this.#points
-      ];
+    this.#points = [
+      newPoint,
+      ...this.#points
+    ];
 
-      this.#sortPointsByDate();
+    this.#sortPointsByDate();
 
-      this._notify(updateType, newPoint);
-    } catch (error) {
-      throw new Error('Can\'t add Point');
-    }
+    this._notify(updateType, newPoint);
   }
 
   async updatePoint(updateType, update) {
@@ -71,21 +67,17 @@ export default class RoutePointsModel extends Observable {
       throw new Error('Can\'t update unexisting Point');
     }
 
-    try {
-      const updatedEvent = await this.#eventsApiService.updatePoint(update);
+    const updatedEvent = await this.#eventsApiService.updatePoint(update);
 
-      this.#points = [
-        ...this.#points.slice(0, index),
-        updatedEvent,
-        ...this.#points.slice(index + 1),
-      ];
+    this.#points = [
+      ...this.#points.slice(0, index),
+      updatedEvent,
+      ...this.#points.slice(index + 1),
+    ];
 
-      this.#sortPointsByDate();
+    this.#sortPointsByDate();
 
-      this._notify(updateType, updatedEvent);
-    } catch (error) {
-      throw new Error('Can\'t update Point');
-    }
+    this._notify(updateType, updatedEvent);
   }
 
   async deletePoint(updateType, update) {
@@ -95,20 +87,16 @@ export default class RoutePointsModel extends Observable {
       throw new Error('Can\'t delete unexisting Point');
     }
 
-    try {
-      await this.#eventsApiService.deletePoint(update);
+    await this.#eventsApiService.deletePoint(update);
 
-      this.#points = [
-        ...this.#points.slice(0, index),
-        ...this.#points.slice(index + 1),
-      ];
+    this.#points = [
+      ...this.#points.slice(0, index),
+      ...this.#points.slice(index + 1),
+    ];
 
-      this.#sortPointsByDate();
+    this.#sortPointsByDate();
 
-      this._notify(updateType, update);
-    } catch (error) {
-      throw new Error('Can\'t delete Point');
-    }
+    this._notify(updateType, update);
   }
 
   #sortPointsByDate() {

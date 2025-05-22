@@ -13,14 +13,16 @@ export default class RoutePointPresenter {
   #onModeChange = null;
   #mode = Mode.DEFAULT;
   #isNewPointFormOpen = null;
+  #closeNewPointForm = null;
   #destinations = null;
   #offers = null;
 
-  constructor(eventsListContainer, onDataChange, onModeChange, isNewPointFormOpen, destinations, offers) {
+  constructor(eventsListContainer, onDataChange, onModeChange, isNewPointFormOpen, closeNewPointForm, destinations, offers) {
     this.#eventsListContainer = eventsListContainer;
     this.#onDataChange = onDataChange;
     this.#onModeChange = onModeChange;
     this.#isNewPointFormOpen = isNewPointFormOpen;
+    this.#closeNewPointForm = closeNewPointForm;
     this.#destinations = destinations;
     this.#offers = offers;
   }
@@ -52,24 +54,14 @@ export default class RoutePointPresenter {
       this.#onFavoriteClick.bind(this)
     );
 
-    this.#editPoint = new CreateEditEventView(
-      this.#routePoint,
-      this.#destinations,
-      this.#offers,
-      this.#onCloseEditButtonClick,
-      this.#onSubmitButtonClick,
-      this.#onDataChange,
-      FormType.EDIT
-    );
-
     render(this.#point, this.#eventsListContainer);
   }
 
-  #onFavoriteClick(routePoint) {
+  #onFavoriteClick = async (routePoint) => {
     // eslint-disable-next-line camelcase
     routePoint.is_favorite = !routePoint.is_favorite;
-    this.#onDataChange(UserAction.UPDATE_POINT, UpdateType.MINOR, routePoint);
-  }
+    await this.#onDataChange(UserAction.UPDATE_POINT, UpdateType.PATCH, routePoint);
+  };
 
   #onEscKeyDown = (evt) => {
     if (isEscapeKey(evt)) {
@@ -79,27 +71,15 @@ export default class RoutePointPresenter {
   };
 
   #onOpenEditButtonClick = () => {
-    if (!this.#isNewPointFormOpen()) {
-      this.#replacePointToEditPoint();
-      document.addEventListener('keydown', this.#onEscKeyDown);
+    if (this.#isNewPointFormOpen()) {
+      this.#closeNewPointForm();
     }
+
+    this.#replacePointToEditPoint();
+    document.addEventListener('keydown', this.#onEscKeyDown);
   };
 
   #onCloseEditButtonClick = () => {
-    this.#replaceEditPointToPoint();
-    document.removeEventListener('keydown', this.#onEscKeyDown);
-  };
-
-  #onSubmitButtonClick = () => {
-    const updatedPoint = this.#editPoint.getUpdatedPoint();
-
-    this.#onDataChange(
-      UserAction.UPDATE_POINT,
-      UpdateType.MINOR,
-      updatedPoint
-    );
-
-    this.init(updatedPoint);
     this.#replaceEditPointToPoint();
     document.removeEventListener('keydown', this.#onEscKeyDown);
   };
@@ -112,6 +92,16 @@ export default class RoutePointPresenter {
     if (!this.#isElementInDOM(this.#point)) {
       return;
     }
+
+    this.#editPoint = new CreateEditEventView(
+      this.#routePoint,
+      this.#destinations,
+      this.#offers,
+      this.#onCloseEditButtonClick,
+      this.#onDataChange,
+      this.#onEscKeyDown,
+      FormType.EDIT
+    );
 
     replace(this.#editPoint, this.#point);
     this.#onModeChange();

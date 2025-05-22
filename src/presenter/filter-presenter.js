@@ -19,10 +19,6 @@ export default class FilterPresenter {
   }
 
   init() {
-    if (!this.#routePointsModel.points || !this.#routePointsModel.points.length) {
-      return;
-    }
-
     const filters = generateFilters(this.#routePointsModel.points);
     const currentFilterType = this.#filterModel.filter;
     const prevComponent = this.#filterComponent;

@@ -1,6 +1,6 @@
 import CreateEditEventView from '../view/create-event-form-view.js';
 import { render, remove, RenderPosition } from '../framework/render.js';
-import { UserAction, UpdateType, FormType, EmptyPoint } from '../const.js';
+import { FormType, EmptyPoint } from '../const.js';
 import { isEscapeKey } from '../utils.js';
 
 export default class NewRoutePointPresenter {
@@ -29,8 +29,8 @@ export default class NewRoutePointPresenter {
       this.#destinations,
       this.#offersByType,
       this.destroy,
-      this.#onFormSubmit,
       this.#onDataChange,
+      this.#onEscKeyDown,
       FormType.CREATE
     );
 
@@ -54,24 +54,6 @@ export default class NewRoutePointPresenter {
   isFormOpen() {
     return this.#formComponent !== null;
   }
-
-  #onFormSubmit = async () => {
-    const newPoint = this.#formComponent.getUpdatedPoint();
-
-    this.#formComponent.setSaving();
-
-    try {
-      await this.#onDataChange(
-        UserAction.ADD_POINT,
-        UpdateType.MINOR,
-        { ...newPoint }
-      );
-
-      this.destroy();
-    } catch (error) {
-      this.#formComponent.setAborting();
-    }
-  };
 
   #onEscKeyDown = (evt) => {
     if (isEscapeKey(evt)) {
