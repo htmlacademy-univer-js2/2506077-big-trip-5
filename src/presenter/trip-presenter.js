@@ -55,9 +55,6 @@ export default class TripPresenter {
       return;
     }
 
-    this.#renderTripInfo();
-    this.#renderSort(this.#routePoints);
-
     if (!this.#routePoints.length) {
       this.#renderEmptyList();
       return;
@@ -70,17 +67,23 @@ export default class TripPresenter {
     this.#onModeChange();
     this.#currentSortType = SortType.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+
+    this.#removeEmptyMessage();
+
     this.#newRoutePointPresenter.init();
     this.#newPointButtonComponent.disableButton();
   };
 
-  isNewPointFormOpen() {
+  #isNewPointFormOpen() {
     return this.#newRoutePointPresenter.isFormOpen();
   }
 
   #onNewPointFormClose = () => {
     if (this.#newPointButtonComponent) {
       this.#newPointButtonComponent.enableButton();
+    }
+    if (!this.#routePoints.length) {
+      this.#renderEmptyList();
     }
   };
 
@@ -91,7 +94,7 @@ export default class TripPresenter {
   }
 
   #renderTripInfo = () => {
-    const tripInfoData = getTripInfo(this.#routePoints, this.#routePointsModel.destinations, this.#routePointsModel.offers);
+    const tripInfoData = getTripInfo(this.#routePointsModel.points, this.#routePointsModel.destinations, this.#routePointsModel.offers);
 
     if (this.#tripInfoComponent) {
       remove(this.#tripInfoComponent);
@@ -131,10 +134,7 @@ export default class TripPresenter {
     this.#removeLoadingComponent();
     this.#removeErrorComponent();
 
-    if (this.#listMessageComponent) {
-      this.#listMessageComponent.element.remove();
-      this.#listMessageComponent = null;
-    }
+    this.#removeEmptyMessage();
 
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;
@@ -157,7 +157,14 @@ export default class TripPresenter {
     const filterType = this.#filterModel.filter;
     const message = EmptyListMessage[filterType] || EmptyListMessage.EVERYTHING;
     this.#listMessageComponent = new ListMessageView(message);
-    render(this.#listMessageComponent, this.eventsContainer);
+    render(this.#listMessageComponent, this.#eventsListContainer.element);
+  }
+
+  #removeEmptyMessage() {
+    if (this.#listMessageComponent) {
+      remove(this.#listMessageComponent);
+      this.#listMessageComponent = null;
+    }
   }
 
   #removeLoadingComponent() {
@@ -178,8 +185,6 @@ export default class TripPresenter {
   );
 
   #renderRoutePointsList(routePoints) {
-    render(this.#eventsListContainer, this.eventsContainer);
-
     routePoints.forEach((routePoint) => {
       this.#renderRoutePoint(routePoint);
     });
@@ -194,7 +199,8 @@ export default class TripPresenter {
       this.#eventsListContainer.element,
       this.#onDataChange,
       this.#onModeChange,
-      () => this.#newRoutePointPresenter.isFormOpen(),
+      () => this.#isNewPointFormOpen(),
+      () => this.#newRoutePointPresenter.destroy(),
       this.#routePointsModel.destinations,
       this.#routePointsModel.offers
     );
@@ -204,6 +210,8 @@ export default class TripPresenter {
   }
 
   #renderContent() {
+    render(this.#eventsListContainer, this.eventsContainer);
+
     if (!this.#routePoints.length) {
       this.#renderEmptyList();
     } else {
@@ -211,12 +219,14 @@ export default class TripPresenter {
     }
   }
 
-  #handleModelEvent = (updateType, data) => {
+  #handleModelEvent = (updateType) => {
     this.#routePoints = this.#getFilteredPoints();
 
     switch (updateType) {
       case UpdateType.PATCH:
-        this.#routePointsPresenter.get(data.id).init(data);
+        this.#sortedRoutePoints = sortRoutePoints(this.#routePoints, this.#currentSortType);
+        this.#clearRoutePointsList();
+        this.#renderRoutePointsList(this.#sortedRoutePoints);
         this.#renderTripInfo();
         break;
       case UpdateType.MINOR:
@@ -258,16 +268,16 @@ export default class TripPresenter {
     }
   };
 
-  #onDataChange = (userAction, updateType, update) => {
+  #onDataChange = async (userAction, updateType, update) => {
     switch (userAction) {
       case UserAction.UPDATE_POINT:
-        this.#routePointsModel.updatePoint(updateType, update);
+        await this.#routePointsModel.updatePoint(updateType, update);
         break;
       case UserAction.ADD_POINT:
-        this.#routePointsModel.addPoint(updateType, update);
+        await this.#routePointsModel.addPoint(updateType, update);
         break;
       case UserAction.DELETE_POINT:
-        this.#routePointsModel.deletePoint(updateType, update);
+        await this.#routePointsModel.deletePoint(updateType, update);
         break;
     }
   };
